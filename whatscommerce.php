@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WhatsCommerce
  * Description: Integración de WooCommerce con WhatsApp
- * Version: 1.7.3
+ * Version: 1.7.4
  * Author: AplicacionesWeb.cl
  * Author URI: https://www.aplicacionesweb.cl
  */
