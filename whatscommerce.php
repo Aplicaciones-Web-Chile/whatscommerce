@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WhatsCommerce
  * Description: Integración de WooCommerce con WhatsApp
- * Version: 1.7.7
+ * Version: 1.7.8
  * Author: AplicacionesWeb.cl
  * Author URI: https://www.aplicacionesweb.cl
  * Text Domain: whatscommerce
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('WHATSCOMMERCE_VERSION', '1.7.7');
+define('WHATSCOMMERCE_VERSION', '1.7.8');
 define('WHATSCOMMERCE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WHATSCOMMERCE_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -54,13 +54,19 @@ spl_autoload_register(function ($class_name) {
 });
 
 // Cargar archivos principales
-require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-whatscommerce.php';
-require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-twilio-service.php';
-require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-user-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-whatscommerce-logger.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-settings-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-product-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-order-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-webhook-handler.php';
 require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-conversation-state.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-user-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-twilio-service.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-whatscommerce.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'tests/class-whatscommerce-test.php';
 
 use WhatsCommerce\WhatsCommerce;
-use WhatsCommerce\TwilioService;
+use WhatsCommerce\Tests\WhatsCommerceTest;
 
 /**
  * Función de inicialización del plugin
@@ -70,9 +76,34 @@ function whatscommerce_init() {
     load_plugin_textdomain('whatscommerce', false, dirname(plugin_basename(__FILE__)) . '/languages');
     
     try {
-        // Inicializar el plugin
+        // Ejecutar pruebas
+        $test_results = WhatsCommerceTest::run_all_tests();
+        
+        if (!empty($test_results)) {
+            // Hay errores, mostrarlos en el admin
+            add_action('admin_notices', function() use ($test_results) {
+                echo '<div class="error"><p>';
+                echo '<strong>' . __('WhatsCommerce - Errores detectados:', 'whatscommerce') . '</strong><br>';
+                
+                foreach ($test_results as $category => $errors) {
+                    echo '<strong>' . ucfirst($category) . ':</strong><br>';
+                    foreach ($errors as $error) {
+                        echo '- ' . esc_html($error) . '<br>';
+                    }
+                }
+                
+                echo '</p></div>';
+            });
+            
+            // Registrar errores en el log
+            error_log('WhatsCommerce Test Errors: ' . print_r($test_results, true));
+            return;
+        }
+
+        // Si no hay errores, inicializar el plugin
         $plugin = WhatsCommerce::get_instance();
         $plugin->init();
+        
     } catch (Exception $e) {
         // Registrar el error
         error_log('WhatsCommerce Error: ' . $e->getMessage());
@@ -122,8 +153,8 @@ register_deactivation_hook(__FILE__, 'whatscommerce_deactivate');
 
 // Agregar enlace de configuración en la lista de plugins
 function whatscommerce_plugin_links($links) {
-    $settings_link = '<a href="' . admin_url('admin.php?page=whatscommerce_settings') . '">' . 
-                     __('Configuración', 'whatscommerce') . '</a>';
+    $settings_link = '<a href="' . admin_url('admin.php?page=whatscommerce') . '">' . 
+                    __('Configuración', 'whatscommerce') . '</a>';
     array_unshift($links, $settings_link);
     return $links;
 }

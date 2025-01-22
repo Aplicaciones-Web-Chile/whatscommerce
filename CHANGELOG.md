@@ -1,5 +1,18 @@
 # Changelog - WhatsCommerce
 
+## [1.7.8] - 2025-01-22
+
+### Agregado
+- Sistema de pruebas automáticas para verificar dependencias
+- Verificación de archivos y clases requeridas
+- Verificación de configuración del plugin
+- Mensajes de error detallados en el panel de administración
+
+### Mejorado
+- Sistema de inicialización del plugin
+- Manejo de errores y logging
+- Carga de archivos y dependencias
+
 ## [1.7.7] - 2025-01-22
 
 ### Corregido
