@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WhatsCommerce
  * Description: Integración de WooCommerce con WhatsApp
- * Version: 1.7.8
+ * Version: 1.7.9
  * Author: AplicacionesWeb.cl
  * Author URI: https://www.aplicacionesweb.cl
  * Text Domain: whatscommerce
@@ -14,7 +14,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('WHATSCOMMERCE_VERSION', '1.7.8');
+define('WHATSCOMMERCE_VERSION', '1.7.9');
 define('WHATSCOMMERCE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WHATSCOMMERCE_PLUGIN_URL', plugin_dir_url(__FILE__));
 

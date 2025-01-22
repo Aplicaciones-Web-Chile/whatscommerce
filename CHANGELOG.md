@@ -1,5 +1,18 @@
 # Changelog - WhatsCommerce
 
+## [1.7.9] - 2025-01-22
+
+### Agregado
+- Clase WhatsCommerceLogger para manejo de logs
+- Sistema de logging con niveles (INFO, ERROR, DEBUG)
+- Directorio de logs con protección .htaccess
+- Verificación de directorios requeridos
+
+### Mejorado
+- Estructura de directorios del plugin
+- Sistema de manejo de errores
+- Documentación del código
+
 ## [1.7.8] - 2025-01-22
 
 ### Agregado
