@@ -10,7 +10,10 @@ wp-content/upgrade/
 wp-content/uploads/
 wp-content/mu-plugins/
 wp-content/wp-cache-config.php
-wp-content/plugins/hello.php
+
+# Ignorar todos los plugins excepto whatscommerce
+/../../*/
+!/../../whatscommerce/
 
 # Packages
 node_modules/
