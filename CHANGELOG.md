@@ -1,5 +1,51 @@
 # Changelog - WhatsCommerce
 
+## [1.7.4] - 2025-01-22
+
+### Cambiado
+- Actualizada la documentación del plugin con información más detallada
+- Mejorada la documentación de todas las clases principales
+- Actualizado el correo de soporte a soporte@aplicacionesweb.cl
+
+### Agregado
+- Nueva estructura de mensajes predefinidos en MessageManager
+- Documentación completa de PHPDoc en todas las clases
+- Integración con sistema de logging mejorado
+- Repositorio público en GitHub
+
+### Optimizado
+- Simplificado el sistema de almacenamiento de usuarios usando metadatos de WordPress
+- Mejorado el manejo de errores y logging en todas las clases
+
+## [1.7.3] - 2025-01-15
+
+### Agregado
+- Nuevo sistema de logging usando Monolog
+- Mejoras en el manejo de conversaciones
+- Nuevas plantillas de mensajes personalizables
+
+### Corregido
+- Error en la creación de pedidos cuando el carrito está vacío
+- Problema con la validación de números de teléfono internacionales
+- Bug en la actualización del estado de las conversaciones
+
+## [1.7.2] - 2025-01-08
+
+### Agregado
+- Soporte para múltiples idiomas (ES, EN)
+- Nueva funcionalidad de repetir último pedido
+- Panel de administración mejorado
+
+### Cambiado
+- Actualizada la integración con la API de Twilio
+- Mejorado el sistema de búsqueda de productos
+- Optimizado el rendimiento general del plugin
+
+### Corregido
+- Problemas de compatibilidad con WooCommerce 8.0
+- Error en el proceso de checkout
+- Bug en la sincronización de estados de pedido
+
 ## [1.6] - 1985
 ### Added
 - Verificación de dependencias para WooCommerce y Transbank.
@@ -30,7 +76,7 @@
 - Funcionalidad de verificación de clientes registrados.
 - Enlace para acceder directamente a la configuración desde el listado de plugins.
 
-### [1.0] - 2024-09-15
+## [1.0] - 2024-09-15
 ### Added
 - Versión inicial del plugin.
 - Comunicación básica con WhatsApp para gestionar pedidos.
