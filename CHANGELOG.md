@@ -1,5 +1,12 @@
 # Changelog - WhatsCommerce
 
+## [1.7.7] - 2025-01-22
+
+### Corregido
+- Error al intentar crear instancia de WhatsCommerce desde ámbito global
+- Mejorada la inicialización de la clase principal
+- Optimizado el manejo de errores durante la inicialización
+
 ## [1.7.6] - 2025-01-22
 
 ### Corregido

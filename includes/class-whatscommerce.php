@@ -72,8 +72,12 @@ class WhatsCommerce {
      *
      * @since 1.0.0
      * @access private
+     * @param TwilioService $twilio_service Servicio de Twilio (opcional).
      */
-    private function __construct() {
+    private function __construct(TwilioService $twilio_service = null) {
+        if ($twilio_service) {
+            $this->twilio_service = $twilio_service;
+        }
         $this->load_dependencies();
         $this->initialize_components();
         $this->setup_hooks();
@@ -85,13 +89,28 @@ class WhatsCommerce {
      * @since 1.0.0
      * @access public
      *
+     * @param TwilioService $twilio_service Servicio de Twilio (opcional).
      * @return WhatsCommerce Instancia del plugin.
      */
-    public static function get_instance() {
+    public static function get_instance($twilio_service = null) {
         if (null === self::$instance) {
-            self::$instance = new self();
+            self::$instance = new self($twilio_service);
+        } elseif ($twilio_service !== null) {
+            self::$instance->twilio_service = $twilio_service;
         }
         return self::$instance;
+    }
+
+    /**
+     * Establece el servicio de Twilio
+     *
+     * @since 1.0.0
+     * @access public
+     *
+     * @param TwilioService $twilio_service Servicio de Twilio.
+     */
+    public function set_twilio_service(TwilioService $twilio_service) {
+        $this->twilio_service = $twilio_service;
     }
 
     /**
@@ -124,7 +143,11 @@ class WhatsCommerce {
         $this->settings_manager = new SettingsManager();
         $this->product_manager = new ProductManager();
         $this->order_manager = new OrderManager();
-        $this->twilio_service = new TwilioService($this->settings_manager);
+        if ($this->twilio_service) {
+            $this->twilio_service = $this->twilio_service;
+        } else {
+            $this->twilio_service = new TwilioService($this->settings_manager);
+        }
         $this->webhook_handler = new WhatsCommerceWebhookHandler($this->twilio_service);
 
         WhatsCommerceLogger::get_instance()->info('Componentes inicializados');

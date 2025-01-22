@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WhatsCommerce
  * Description: Integración de WooCommerce con WhatsApp
- * Version: 1.7.6
+ * Version: 1.7.7
  * Author: AplicacionesWeb.cl
  * Author URI: https://www.aplicacionesweb.cl
  * Text Domain: whatscommerce
@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
 }
 
 // Definir constantes del plugin
-define('WHATSCOMMERCE_VERSION', '1.7.6');
+define('WHATSCOMMERCE_VERSION', '1.7.7');
 define('WHATSCOMMERCE_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WHATSCOMMERCE_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-// Cargar el composer autoloader si existe
+// Cargar el autoloader de Composer
 $composer_autoload = WHATSCOMMERCE_PLUGIN_DIR . 'vendor/autoload.php';
 if (file_exists($composer_autoload)) {
     require_once $composer_autoload;
@@ -53,11 +53,43 @@ spl_autoload_register(function ($class_name) {
     return false;
 });
 
-// Cargar archivos de clases principales
-require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-twilio-service.php';
+// Cargar archivos principales
 require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-whatscommerce.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-twilio-service.php';
 require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-user-manager.php';
 require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-conversation-state.php';
+
+use WhatsCommerce\WhatsCommerce;
+use WhatsCommerce\TwilioService;
+
+/**
+ * Función de inicialización del plugin
+ */
+function whatscommerce_init() {
+    // Cargar traducciones
+    load_plugin_textdomain('whatscommerce', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    
+    try {
+        // Inicializar el plugin
+        $plugin = WhatsCommerce::get_instance();
+        $plugin->init();
+    } catch (Exception $e) {
+        // Registrar el error
+        error_log('WhatsCommerce Error: ' . $e->getMessage());
+        
+        // Mostrar mensaje de error en el admin
+        add_action('admin_notices', function() use ($e) {
+            ?>
+            <div class="notice notice-error">
+                <p><?php echo esc_html('Error al inicializar WhatsCommerce: ' . $e->getMessage()); ?></p>
+            </div>
+            <?php
+        });
+    }
+}
+
+// Inicializar el plugin después de que WordPress esté listo
+add_action('init', 'whatscommerce_init');
 
 // Función de activación del plugin
 function whatscommerce_activate() {
@@ -87,52 +119,6 @@ function whatscommerce_deactivate() {
     flush_rewrite_rules();
 }
 register_deactivation_hook(__FILE__, 'whatscommerce_deactivate');
-
-// Cargar traducciones
-function whatscommerce_load_textdomain() {
-    load_plugin_textdomain('whatscommerce', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}
-add_action('init', 'whatscommerce_load_textdomain');
-
-// Inicializar el plugin
-function whatscommerce_init() {
-    // Verificar si WooCommerce está activo
-    if (!class_exists('WooCommerce')) {
-        add_action('admin_notices', function () {
-            echo '<div class="error"><p>';
-            echo __('WhatsCommerce requiere que WooCommerce esté instalado y activado.', 'whatscommerce');
-            echo '</p></div>';
-        });
-        return;
-    }
-
-    // Obtener configuración de Twilio
-    $options = get_option('whatscommerce_options', array());
-    $twilio_sid = get_option('whatscommerce_twilio_sid');
-    $twilio_token = get_option('whatscommerce_twilio_token');
-    $twilio_number = get_option('whatscommerce_twilio_number');
-
-    // Inicializar servicios
-    try {
-        if (!class_exists('WhatsCommerce\TwilioService')) {
-            throw new Exception('No se pudo cargar la clase TwilioService');
-        }
-        
-        $twilio_service = new WhatsCommerce\TwilioService($twilio_sid, $twilio_token, $twilio_number);
-        $whatscommerce = new WhatsCommerce\WhatsCommerce($twilio_service);
-        $whatscommerce->init();
-    } catch (Exception $e) {
-        error_log('WhatsCommerce Error: ' . $e->getMessage());
-        add_action('admin_notices', function () use ($e) {
-            echo '<div class="error"><p>';
-            echo __('Error al inicializar WhatsCommerce: ', 'whatscommerce') . esc_html($e->getMessage());
-            echo '</p></div>';
-        });
-    }
-}
-
-// Inicializar el plugin después de que todos los plugins estén cargados
-add_action('plugins_loaded', 'whatscommerce_init', 20);
 
 // Agregar enlace de configuración en la lista de plugins
 function whatscommerce_plugin_links($links) {
