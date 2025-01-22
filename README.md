@@ -54,7 +54,7 @@ Los administradores pueden:
 
 Para soporte técnico o consultas:
 - Abre un issue en GitHub
-- Envía un correo a [soporte@aplicaciones.cl]
+- Envía un correo a [soporte@aplicacionesweb.cl]
 
 ## Contribuir
 
