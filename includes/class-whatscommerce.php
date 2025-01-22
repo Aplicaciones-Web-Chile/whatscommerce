@@ -1,4 +1,6 @@
 <?php
+namespace WhatsCommerce;
+
 /**
  * Clase principal del plugin WhatsCommerce
  *

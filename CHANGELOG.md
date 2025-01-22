@@ -1,5 +1,11 @@
 # Changelog - WhatsCommerce
 
+## [1.7.6] - 2025-01-22
+
+### Corregido
+- Error de clase WhatsCommerce no encontrada
+- Agregado namespace WhatsCommerce a la clase principal
+
 ## [1.7.5] - 2025-01-22
 
 ### Corregido
