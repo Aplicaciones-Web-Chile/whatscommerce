@@ -1,0 +1,78 @@
+# English (United States) translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-10-29 20:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en_US\n"
+"Language-Team: en_US <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.16.0\n"
+
+msgid "Configure the WhatsCommerce plugin to integrate with WooCommerce and WhatsApp."
+msgstr "Configure the WhatsCommerce plugin to integrate with WooCommerce and WhatsApp."
+
+msgid "API Settings"
+msgstr "API Settings"
+
+msgid "WooCommerce API Key"
+msgstr "WooCommerce API Key"
+
+msgid ""
+"This API key allows WhatsCommerce to access WooCommerce data. Generate it "
+"from WooCommerce API settings."
+msgstr ""
+"This API key allows WhatsCommerce to access WooCommerce data. Generate it "
+"from WooCommerce API settings."
+
+msgid "Twilio Account SID"
+msgstr "Twilio Account SID"
+
+msgid ""
+"Twilio Account SID to connect WhatsCommerce with WhatsApp. Get it from Twilio"
+" console."
+msgstr ""
+"Twilio Account SID to connect WhatsCommerce with WhatsApp. Get it from Twilio"
+" console."
+
+msgid "Twilio Auth Token"
+msgstr "Twilio Auth Token"
+
+msgid "Twilio Auth Token for secure connection. Get it from Twilio console."
+msgstr "Twilio Auth Token for secure connection. Get it from Twilio console."
+
+msgid "Twilio WhatsApp Number"
+msgstr "Twilio WhatsApp Number"
+
+msgid ""
+"The Twilio WhatsApp-enabled number used to send messages (format: "
+"+1234567890)."
+msgstr ""
+"The Twilio WhatsApp-enabled number used to send messages (format: "
+"+1234567890)."
+
+msgid "Greeting Message"
+msgstr "Greeting Message"
+
+msgid "Personalize the greeting message for your customers."
+msgstr "Personalize the greeting message for your customers."
+
+msgid "Confirmation Message"
+msgstr "Confirmation Message"
+
+msgid "Customize the confirmation message sent after a successful order."
+msgstr "Customize the confirmation message sent after a successful order."
+
+msgid "Save Changes"
+msgstr "Save Changes"
+

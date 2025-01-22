@@ -1,0 +1,91 @@
+# Translations template for WhatsCommerce.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the WhatsCommerce project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WhatsCommerce 1.2\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-10-29 18:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.16.0\n"
+
+#. Plugin settings page title
+msgid "WhatsCommerce Integration Settings"
+msgstr ""
+
+#. Field label for WooCommerce API Key
+msgid "WooCommerce API Key"
+msgstr ""
+
+#. Description for WooCommerce API Key field
+msgid ""
+"This API key allows WhatsCommerce to access WooCommerce data. Generate it "
+"from WooCommerce > Settings > Advanced > REST API."
+msgstr ""
+
+#. Field label for WhatsApp API Key
+msgid "WhatsApp API Key"
+msgstr ""
+
+#. Description for WhatsApp API Key field
+msgid ""
+"API key to connect WhatsCommerce with WhatsApp. Get it from Twilio or Meta "
+"for Business API."
+msgstr ""
+
+#. Field label for greeting message
+msgid "Greeting Message"
+msgstr ""
+
+#. Description for greeting message field
+msgid "Personalize the greeting message for your customers."
+msgstr ""
+
+#. Field label for order confirmation message
+msgid "Confirmation Message"
+msgstr ""
+
+#. Description for confirmation message field
+msgid "Customize the confirmation message sent after a successful order."
+msgstr ""
+
+#. Button label to save settings
+msgid "Save Changes"
+msgstr ""
+
+#. Command for viewing catalog
+msgid "Catalog"
+msgstr ""
+
+#. Message for invalid product ID
+msgid "Product not found."
+msgstr ""
+
+#. Message for out of stock product
+msgid "The product is not available at the moment."
+msgstr ""
+
+#. Message when product is added to cart
+msgid "Product added to the cart. Send 'VIEW CART' to see your selection."
+msgstr ""
+
+#. Message for viewing cart contents
+msgid "Here is the content of your cart:"
+msgstr ""
+
+#. Prompt message after greeting
+msgid "Send 'CATALOG' to view products or 'ADD [ID]' to add to the cart."
+msgstr ""
+
+#. Order confirmation message
+msgid "Thank you for your order. We hope to see you again soon!"
+msgstr ""
+

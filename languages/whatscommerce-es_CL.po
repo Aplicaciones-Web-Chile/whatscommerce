@@ -1,0 +1,82 @@
+# Spanish (Chile) translations for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-10-29 20:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es_CL\n"
+"Language-Team: es_CL <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.16.0\n"
+
+msgid "Configure the WhatsCommerce plugin to integrate with WooCommerce and WhatsApp."
+msgstr "Configura el plugin WhatsCommerce para integrarlo con WooCommerce y WhatsApp."
+
+msgid "API Settings"
+msgstr "Configuración de API"
+
+msgid "WooCommerce API Key"
+msgstr "Clave API de WooCommerce"
+
+msgid ""
+"This API key allows WhatsCommerce to access WooCommerce data. Generate it "
+"from WooCommerce API settings."
+msgstr ""
+"Esta clave API permite a WhatsCommerce acceder a los datos de WooCommerce. "
+"Genérela desde la configuración de API de WooCommerce."
+
+msgid "Twilio Account SID"
+msgstr "SID de cuenta de Twilio"
+
+msgid ""
+"Twilio Account SID to connect WhatsCommerce with WhatsApp. Get it from Twilio"
+" console."
+msgstr ""
+"SID de la cuenta de Twilio para conectar WhatsCommerce con WhatsApp. "
+"Consíguelo en la consola de Twilio."
+
+msgid "Twilio Auth Token"
+msgstr "Token de autenticación de Twilio"
+
+msgid "Twilio Auth Token for secure connection. Get it from Twilio console."
+msgstr ""
+"Token de autenticación de Twilio para conexión segura. Consíguelo en la "
+"consola de Twilio."
+
+msgid "Twilio WhatsApp Number"
+msgstr "Número de WhatsApp de Twilio"
+
+msgid ""
+"The Twilio WhatsApp-enabled number used to send messages (format: "
+"+1234567890)."
+msgstr ""
+"El número habilitado de WhatsApp de Twilio usado para enviar mensajes "
+"(formato: +1234567890)."
+
+msgid "Greeting Message"
+msgstr "Mensaje de bienvenida"
+
+msgid "Personalize the greeting message for your customers."
+msgstr "Personaliza el mensaje de bienvenida para tus clientes."
+
+msgid "Confirmation Message"
+msgstr "Mensaje de confirmación"
+
+msgid "Customize the confirmation message sent after a successful order."
+msgstr ""
+"Personaliza el mensaje de confirmación que se envía después de un pedido "
+"exitoso."
+
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
