@@ -1,5 +1,18 @@
 # Changelog - WhatsCommerce
 
+## [1.7.5] - 2025-01-22
+
+### Corregido
+- Error de carga de clases usando namespaces
+- Problema con la carga temprana de traducciones
+- Error en la inicialización del servicio de Twilio
+
+### Mejorado
+- Implementado sistema de autoload con namespaces
+- Optimizada la carga de archivos de clase
+- Mejorado el manejo de errores en la inicialización del plugin
+- Actualizada la documentación de la clase TwilioService
+
 ## [1.7.4] - 2025-01-22
 
 ### Cambiado

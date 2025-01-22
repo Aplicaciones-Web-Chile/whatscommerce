@@ -2,33 +2,72 @@
 /**
  * Plugin Name: WhatsCommerce
  * Description: Integración de WooCommerce con WhatsApp
- * Version: 1.7.4
+ * Version: 1.7.5
  * Author: AplicacionesWeb.cl
  * Author URI: https://www.aplicacionesweb.cl
+ * Text Domain: whatscommerce
+ * Domain Path: /languages
  */
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
+// Definir constantes del plugin
+define('WHATSCOMMERCE_VERSION', '1.7.5');
+define('WHATSCOMMERCE_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('WHATSCOMMERCE_PLUGIN_URL', plugin_dir_url(__FILE__));
+
+// Cargar el composer autoloader si existe
+$composer_autoload = WHATSCOMMERCE_PLUGIN_DIR . 'vendor/autoload.php';
+if (file_exists($composer_autoload)) {
+    require_once $composer_autoload;
+}
+
 // Autoloader para las clases del plugin
 spl_autoload_register(function ($class_name) {
-    $classes_dir = plugin_dir_path(__FILE__) . 'includes/';
-    $class_file = $classes_dir . 'class-' . strtolower(str_replace('_', '-', $class_name)) . '.php';
-    
-    if (file_exists($class_file)) {
-        require_once $class_file;
+    // Lista de prefijos de namespace a buscar
+    $prefixes = array(
+        'WhatsCommerce\\' => WHATSCOMMERCE_PLUGIN_DIR . 'includes/'
+    );
+
+    foreach ($prefixes as $prefix => $base_dir) {
+        // Verificar si la clase usa el prefijo
+        $len = strlen($prefix);
+        if (strncmp($prefix, $class_name, $len) !== 0) {
+            continue;
+        }
+
+        // Obtener el nombre relativo de la clase
+        $relative_class = substr($class_name, $len);
+
+        // Reemplazar el namespace con directorios
+        $file = $base_dir . 'class-' . strtolower(str_replace('_', '-', $relative_class)) . '.php';
+
+        if (file_exists($file)) {
+            require_once $file;
+            return true;
+        }
     }
+
+    return false;
 });
 
-// Cargar el composer autoloader
-require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
+// Cargar archivos de clases principales
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-twilio-service.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-whatscommerce.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-user-manager.php';
+require_once WHATSCOMMERCE_PLUGIN_DIR . 'includes/class-conversation-state.php';
 
 // Función de activación del plugin
 function whatscommerce_activate() {
     // Crear tablas necesarias
-    $user_manager = new UserManager();
-    $conversation_state = new ConversationState();
+    if (class_exists('WhatsCommerce\UserManager')) {
+        $user_manager = new WhatsCommerce\UserManager();
+    }
+    if (class_exists('WhatsCommerce\ConversationState')) {
+        $conversation_state = new WhatsCommerce\ConversationState();
+    }
     
     // Crear opciones por defecto
     $default_options = array(
@@ -49,6 +88,12 @@ function whatscommerce_deactivate() {
 }
 register_deactivation_hook(__FILE__, 'whatscommerce_deactivate');
 
+// Cargar traducciones
+function whatscommerce_load_textdomain() {
+    load_plugin_textdomain('whatscommerce', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+add_action('init', 'whatscommerce_load_textdomain');
+
 // Inicializar el plugin
 function whatscommerce_init() {
     // Verificar si WooCommerce está activo
@@ -61,9 +106,6 @@ function whatscommerce_init() {
         return;
     }
 
-    // Cargar traducciones
-    load_plugin_textdomain('whatscommerce', false, dirname(plugin_basename(__FILE__)) . '/languages');
-
     // Obtener configuración de Twilio
     $options = get_option('whatscommerce_options', array());
     $twilio_sid = get_option('whatscommerce_twilio_sid');
@@ -72,8 +114,12 @@ function whatscommerce_init() {
 
     // Inicializar servicios
     try {
-        $twilio_service = new TwilioService($twilio_sid, $twilio_token, $twilio_number);
-        $whatscommerce = new WhatsCommerce($twilio_service);
+        if (!class_exists('WhatsCommerce\TwilioService')) {
+            throw new Exception('No se pudo cargar la clase TwilioService');
+        }
+        
+        $twilio_service = new WhatsCommerce\TwilioService($twilio_sid, $twilio_token, $twilio_number);
+        $whatscommerce = new WhatsCommerce\WhatsCommerce($twilio_service);
         $whatscommerce->init();
     } catch (Exception $e) {
         error_log('WhatsCommerce Error: ' . $e->getMessage());
