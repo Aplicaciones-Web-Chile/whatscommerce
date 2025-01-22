@@ -1,4 +1,6 @@
 <?php
+namespace WhatsCommerce;
+
 /**
  * Gestión del estado de conversaciones de WhatsCommerce
  *

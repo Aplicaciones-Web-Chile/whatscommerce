@@ -1,5 +1,17 @@
 # Changelog - WhatsCommerce
 
+## [1.7.10] - 2025-01-22
+
+### Corregido
+- Agregado namespace WhatsCommerce a todas las clases
+- Instaladas correctamente las dependencias de Composer
+- Corregido el nombre de la clase WebhookHandler a WhatsCommerceWebhookHandler
+
+### Mejorado
+- Sistema de autoload de clases
+- Integración con dependencias externas
+- Documentación de las clases
+
 ## [1.7.9] - 2025-01-22
 
 ### Agregado

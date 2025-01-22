@@ -1,4 +1,6 @@
 <?php
+namespace WhatsCommerce;
+
 /**
  * Gestión de productos de WhatsCommerce
  *

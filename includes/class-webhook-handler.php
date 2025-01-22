@@ -1,10 +1,11 @@
 <?php
+namespace WhatsCommerce;
+
 /**
- * Manejador de Webhooks de WhatsCommerce
+ * Manejador de webhooks de WhatsCommerce
  *
- * Esta clase se encarga de procesar las llamadas entrantes de Twilio,
- * validar las firmas de seguridad y dirigir los mensajes al procesador
- * correspondiente.
+ * Esta clase maneja todas las solicitudes webhook entrantes
+ * de Twilio y procesa las respuestas de los usuarios.
  *
  * @package WhatsCommerce
  * @subpackage Webhooks
