@@ -78,9 +78,6 @@ class WhatsCommerce {
         if ($twilio_service) {
             $this->twilio_service = $twilio_service;
         }
-        $this->load_dependencies();
-        $this->initialize_components();
-        $this->setup_hooks();
     }
 
     /**
@@ -114,19 +111,45 @@ class WhatsCommerce {
     }
 
     /**
+     * Inicializa el plugin
+     *
+     * Este método se llama después de que WordPress está listo.
+     * Configura los hooks y carga las dependencias necesarias.
+     *
+     * @since 1.0.0
+     * @access public
+     */
+    public function init() {
+        $this->load_dependencies();
+        $this->initialize_components();
+        $this->setup_hooks();
+    }
+
+    /**
      * Carga las dependencias necesarias
      *
      * @since 1.0.0
      * @access private
      */
     private function load_dependencies() {
+        // 1. Cargar el logger primero ya que otros componentes lo usan
+        require_once plugin_dir_path(__FILE__) . 'class-whatscommerce-logger.php';
+        
+        // 2. Cargar clases base que no tienen dependencias
+        require_once plugin_dir_path(__FILE__) . 'class-message-manager.php';
+        require_once plugin_dir_path(__FILE__) . 'class-conversation-state.php';
+        require_once plugin_dir_path(__FILE__) . 'class-user-manager.php';
+        
+        // 3. Cargar el gestor de configuraciones que depende de MessageManager
         require_once plugin_dir_path(__FILE__) . 'class-settings-manager.php';
+        
+        // 4. Cargar servicios que dependen de la configuración
+        require_once plugin_dir_path(__FILE__) . 'class-twilio-service.php';
+        
+        // 5. Cargar gestores que dependen de los servicios
         require_once plugin_dir_path(__FILE__) . 'class-product-manager.php';
         require_once plugin_dir_path(__FILE__) . 'class-order-manager.php';
-        require_once plugin_dir_path(__FILE__) . 'class-twilio-service.php';
         require_once plugin_dir_path(__FILE__) . 'class-webhook-handler.php';
-        require_once plugin_dir_path(__FILE__) . 'class-conversation-state.php';
-        require_once plugin_dir_path(__FILE__) . 'class-logger.php';
     }
 
     /**
@@ -136,21 +159,39 @@ class WhatsCommerce {
      * @access private
      */
     private function initialize_components() {
-        // Inicializar el logger primero
-        WhatsCommerceLogger::get_instance();
+        try {
+            // 1. Inicializar el logger primero
+            WhatsCommerceLogger::get_instance();
 
-        // Inicializar componentes principales
-        $this->settings_manager = new SettingsManager();
-        $this->product_manager = new ProductManager();
-        $this->order_manager = new OrderManager();
-        if ($this->twilio_service) {
-            $this->twilio_service = $this->twilio_service;
-        } else {
-            $this->twilio_service = new TwilioService($this->settings_manager);
+            // 2. Inicializar los componentes base
+            $message_manager = MessageManager::get_instance();
+
+            // 3. Inicializar el gestor de configuraciones
+            $this->settings_manager = new SettingsManager();
+
+            // 4. Obtener e inicializar el servicio de Twilio
+            $account_sid = $this->settings_manager->get_option('twilio_account_sid');
+            $auth_token = $this->settings_manager->get_option('twilio_auth_token');
+            $whatsapp_number = $this->settings_manager->get_option('whatsapp_number');
+            
+            if (!empty($account_sid) && !empty($auth_token) && !empty($whatsapp_number)) {
+                $this->twilio_service = new TwilioService($account_sid, $auth_token, $whatsapp_number);
+            }
+
+            // 5. Inicializar los gestores que dependen de otros servicios
+            $this->product_manager = new ProductManager();
+            $this->order_manager = new OrderManager();
+            $this->webhook_handler = new WhatsCommerceWebhookHandler($this, $this->twilio_service);
+
+        } catch (\Exception $e) {
+            error_log('WhatsCommerce Error: Error al inicializar componentes - ' . $e->getMessage());
+            
+            add_action('admin_notices', function() use ($e) {
+                echo '<div class="error"><p>';
+                echo esc_html__('Error al inicializar WhatsCommerce: ', 'whatscommerce') . esc_html($e->getMessage());
+                echo '</p></div>';
+            });
         }
-        $this->webhook_handler = new WhatsCommerceWebhookHandler($this->twilio_service);
-
-        WhatsCommerceLogger::get_instance()->info('Componentes inicializados');
     }
 
     /**
@@ -160,18 +201,16 @@ class WhatsCommerce {
      * @access private
      */
     private function setup_hooks() {
-        // Hooks de activación/desactivación
+        // Hooks de activación y desactivación
         register_activation_hook(WHATSCOMMERCE_PLUGIN_FILE, array($this, 'activate'));
         register_deactivation_hook(WHATSCOMMERCE_PLUGIN_FILE, array($this, 'deactivate'));
 
-        // Hooks de admin
+        // Hooks de administración
         add_action('admin_menu', array($this, 'add_admin_menu'));
-        add_action('admin_init', array($this, 'register_settings'));
+        add_action('admin_init', array($this->settings_manager, 'register_settings'));
 
-        // Hooks de REST API
-        add_action('rest_api_init', array($this->webhook_handler, 'register_routes'));
-
-        WhatsCommerceLogger::get_instance()->info('Hooks configurados');
+        // Hooks de webhook
+        add_action('rest_api_init', array($this->webhook_handler, 'register_webhook_endpoint'));
     }
 
     /**
@@ -181,7 +220,7 @@ class WhatsCommerce {
      * @access public
      */
     public function activate() {
-        WhatsCommerceLogger::get_instance()->info('Plugin activado');
+        error_log('WhatsCommerce: Plugin activado');
         
         // Crear tablas personalizadas si es necesario
         $this->create_custom_tables();
@@ -203,7 +242,7 @@ class WhatsCommerce {
      * @access public
      */
     public function deactivate() {
-        WhatsCommerceLogger::get_instance()->info('Plugin desactivado');
+        error_log('WhatsCommerce: Plugin desactivado');
         
         // Limpiar datos temporales
         $this->cleanup_temporary_data();
@@ -224,18 +263,9 @@ class WhatsCommerce {
             'WhatsCommerce',
             'manage_options',
             'whatscommerce',
-            array($this, 'render_admin_page'),
+            array($this->settings_manager, 'render_settings_page'),
             'dashicons-whatsapp',
             56
-        );
-
-        add_submenu_page(
-            'whatscommerce',
-            'Configuración',
-            'Configuración',
-            'manage_options',
-            'whatscommerce-settings',
-            array($this, 'render_settings_page')
         );
     }
 
@@ -252,7 +282,7 @@ class WhatsCommerce {
         }
 
         // Incluir template
-        require_once plugin_dir_path(WHATSCOMMERCE_PLUGIN_FILE) . 'admin/templates/admin-page.php';
+        require_once WHATSCOMMERCE_PLUGIN_DIR . 'admin/templates/admin-page.php';
     }
 
     /**
@@ -268,7 +298,7 @@ class WhatsCommerce {
         }
 
         // Incluir template
-        require_once plugin_dir_path(WHATSCOMMERCE_PLUGIN_FILE) . 'admin/templates/settings-page.php';
+        require_once WHATSCOMMERCE_PLUGIN_DIR . 'admin/templates/settings-page.php';
     }
 
     /**
